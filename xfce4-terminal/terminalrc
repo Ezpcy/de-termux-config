@@ -1,0 +1,21 @@
+[Configuration]
+FontName=JetBrainsMono Nerd Font 11
+FontUseSystem=FALSE
+ColorForeground=#ebebededf0f0
+ColorBackground=#000000000000
+ColorCursor=#2929a9a99e9e
+ColorCursorUseDefault=FALSE
+ColorSelection=#ebebededf0f0
+ColorSelectionBackground=#151558585252
+ColorSelectionUseDefault=FALSE
+ColorBold=#ebebededf0f0
+ColorBoldUseDefault=TRUE
+ColorPalette=#202021212424;#f7f776768e8e;#2929a9a99e9e;#e0e0afaf6868;#5a5a9f9fd4d4;#b4b48e8eadad;#23238f8f8686;#8b8b8e8e9494;#5c5c5f5f6666;#ffff8f8fa3a3;#3f3fc7c7bbbb;#f0f0c5c58484;#7a7ab6b6e6e6;#c9c9a6a6c2c2;#5f5fd3d3c8c8;#ebebededf0f0
+MiscMenubarDefault=FALSE
+MiscToolbarDefault=FALSE
+MiscBordersDefault=TRUE
+MiscCursorShape=TERMINAL_CURSOR_SHAPE_IBEAM
+MiscCursorBlinks=FALSE
+MiscConfirmClose=FALSE
+ScrollingBar=TERMINAL_SCROLLBAR_NONE
+MiscDefaultGeometry=100x30

@@ -1,0 +1,24 @@
+// rofi launcher, styled after the vicinae launcher on Hyprland
+configuration {
+  modi: "drun,run,window";
+  show-icons: true;
+  icon-theme: "Papirus-Dark";
+  font: "NotoSans Nerd Font 11";
+  drun-display-format: "{name}";
+  display-drun: "󰀻  Apps";
+  display-run: "  Run";
+  display-window: "󰖲  Windows";
+  matching: "fuzzy";
+  sort: true;
+  sorting-method: "fzf";
+  case-sensitive: false;
+  // a tap selects and opens, the pointer position doesn't preselect rows
+  hover-select: false;
+  kb-cancel: "Escape,Super_L,Control+bracketleft";
+  kb-row-up: "Up,Control+k";
+  kb-row-down: "Down,Control+j";
+  kb-remove-to-eol: "";
+  kb-accept-entry: "Return,KP_Enter";
+}
+
+@theme "~/.config/i3/rofi/theme.rasi"

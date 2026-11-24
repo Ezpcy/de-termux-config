@@ -1,0 +1,74 @@
+# dunst in the main-theme palette (replaces mako on Hyprland)
+
+[global]
+    monitor = 0
+    follow = keyboard
+    origin = top-right
+    offset = (12, 42)
+    width = (240, 360)
+    height = (0, 200)
+    notification_limit = 5
+    indicate_hidden = yes
+    stack_duplicates = true
+    sort = yes
+
+    # progress bar for volume / layout toasts (-h int:value:N)
+    progress_bar = true
+    progress_bar_height = 6
+    progress_bar_frame_width = 0
+    progress_bar_min_width = 200
+    progress_bar_max_width = 336
+    progress_bar_corner_radius = 3
+    highlight = "#29a99e"
+
+    font = NotoSans Nerd Font 10
+    markup = full
+    format = "<b>%s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    ellipsize = end
+    word_wrap = yes
+    show_age_threshold = 60
+    ignore_newline = no
+
+    padding = 12
+    horizontal_padding = 14
+    text_icon_padding = 12
+    gap_size = 6
+    separator_height = 0
+    separator_color = frame
+    frame_width = 1
+    frame_color = "#238f86"
+    corner_radius = 8
+
+    icon_theme = Papirus-Dark
+    enable_recursive_icon_lookup = true
+    icon_position = left
+    min_icon_size = 24
+    max_icon_size = 48
+
+    mouse_left_click = do_action, close_current
+    mouse_middle_click = close_all
+    mouse_right_click = close_current
+
+    dmenu = rofi -dmenu -p dunst -config ~/.config/i3/rofi/config.rasi
+    browser = firefox
+
+[urgency_low]
+    background = "#0f0f0f"
+    foreground = "#8b8e94"
+    frame_color = "#202124"
+    timeout = 4
+
+[urgency_normal]
+    background = "#0f0f0f"
+    foreground = "#ebedf0"
+    frame_color = "#238f86"
+    timeout = 6
+
+[urgency_critical]
+    background = "#0f0f0f"
+    foreground = "#ebedf0"
+    frame_color = "#f7768e"
+    highlight = "#f7768e"
+    timeout = 0

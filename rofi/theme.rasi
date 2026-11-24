@@ -1,0 +1,128 @@
+/* main-theme: translucent black card (picom blurs behind Rofi only),
+   1px teal border, #155852 selection, #29a99e accents. */
+* {
+  bg:         #0f0f0fd9;
+  bg-solid:   #0f0f0f;
+  card:       #202124;
+  primary-hi: #155852;
+  accent:     #29a99e;
+  border-col: #238f86;
+  text:       #ebedf0;
+  muted:      #8b8e94;
+  danger:     #f7768e;
+
+  background-color: transparent;
+  text-color:       @text;
+  margin:  0;
+  padding: 0;
+  spacing: 0;
+}
+
+window {
+  location: center;
+  anchor:   center;
+  width:    640px;
+  background-color: @bg;
+  border:        1px;
+  border-color:  @border-col;
+  border-radius: 14px;
+}
+
+mainbox {
+  padding:  12px;
+  spacing:  10px;
+  children: [ inputbar, message, listview, mode-switcher ];
+}
+
+inputbar {
+  padding:  10px 14px;
+  spacing:  10px;
+  background-color: @card;
+  border-radius: 10px;
+  children: [ prompt, entry ];
+}
+
+prompt {
+  text-color: @accent;
+}
+
+entry {
+  placeholder: "Search…";
+  placeholder-color: @muted;
+  cursor: text;
+}
+
+message {
+  padding: 8px 14px;
+  background-color: @card;
+  border-radius: 10px;
+}
+
+textbox {
+  text-color: @muted;
+}
+
+listview {
+  lines:   8;
+  columns: 1;
+  fixed-height: true;
+  scrollbar: false;
+  spacing: 2px;
+}
+
+element {
+  padding: 8px 12px;
+  spacing: 12px;
+  border-radius: 8px;
+}
+
+element normal.normal, element alternate.normal {
+  background-color: transparent;
+  text-color: @text;
+}
+
+element normal.urgent, element alternate.urgent {
+  text-color: @danger;
+}
+
+element normal.active, element alternate.active {
+  text-color: @accent;
+}
+
+element selected.normal, element selected.active {
+  background-color: @primary-hi;
+  text-color: @text;
+}
+
+element selected.urgent {
+  background-color: @danger;
+  text-color: @bg-solid;
+}
+
+element-icon {
+  size: 22px;
+  vertical-align: 0.5;
+  background-color: transparent;
+}
+
+element-text {
+  vertical-align: 0.5;
+  background-color: transparent;
+  text-color: inherit;
+  highlight: bold #29a99e;
+}
+
+mode-switcher {
+  spacing: 6px;
+}
+
+button {
+  padding: 6px;
+  border-radius: 8px;
+  text-color: @muted;
+}
+
+button selected {
+  background-color: @card;
+  text-color: @accent;
+}
