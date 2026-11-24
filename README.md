@@ -92,6 +92,7 @@ Left out because X11/Termux has nothing equivalent: hyprlock/hypridle, brightnes
 
 - **GPU:** Turnip runs the Adreno 830 through zink (OpenGL 4.6). The X server has no swapchain zink can use, so without `MESA_VK_WSI_DEBUG=sw` GL windows like kitty stay black. `start-desktop.sh` sets it. Check with `glxinfo -B | grep renderer`.
 - **picom** uses the **xrender** backend. The GL backend aborts on an assertion after the same swapchain error, and with `MESA_VK_WSI_DEBUG=sw` it draws a black screen. Since `dual_kawase` needs GL, the launcher blur uses `gaussian`. To try GL anyway: `PICOM_BACKEND=glx scripts/picom.sh`.
+- `start-desktop.sh` always clears out the previous session first, including one that died without being stopped (app closed, X server killed by Android). Leftover processes hang on the dead X connection and ignore SIGTERM, so they get SIGKILL. PulseAudio is started without `DISPLAY`, because its D-Bus autolaunch against a dead `:0` hung forever and blocked every start after the first. If the X server doesn't come up, the script prints the tail of `$TMPDIR/termux-x11.log`.
 - Android blocks `/proc/stat` for apps, so the bar has no CPU module and btop won't run (it needs root). htop works.
 - The battery reading comes from `termux-battery-status`, which needs the Termux:API app; `/sys/class/power_supply` isn't readable.
 - Termux:X11 only shares text with the Android clipboard, so screenshots are also saved to `~/Pictures/Screenshots`.

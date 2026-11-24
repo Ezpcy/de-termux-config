@@ -4,22 +4,33 @@
 # Keep the CPU awake while the desktop runs (stop-desktop.sh releases it)
 termux-wake-lock
 
-# Kill an old X server (and the session inside it) if one is still running
-pkill -f com.termux.x11 2>/dev/null
-sleep 0.5
+LOG="${TMPDIR:-/data/data/com.termux/files/usr/tmp}/termux-x11.log"
+SOCKET="${TMPDIR:-/data/data/com.termux/files/usr/tmp}/.X11-unix/X0"
 
-export DISPLAY=:0
+# Clear out whatever the previous session left behind (also one that died
+# without being stopped), keeping PulseAudio
+"$(dirname "$(readlink -f "$0")")/stop-desktop.sh" --restart
+
 export XDG_RUNTIME_DIR="${TMPDIR:-/data/data/com.termux/files/usr/tmp}"
 # Icon/theme lookup (dunst, rofi, GTK) under $PREFIX instead of /usr
 export XDG_DATA_DIRS="$PREFIX/share:$HOME/.local/share"
 export XDG_CONFIG_DIRS="$PREFIX/etc/xdg"
 
-# Sound: PulseAudio accepting local connections, for apps in the desktop
+# Sound: PulseAudio accepting local connections, for apps in the desktop.
+# Started without DISPLAY/D-Bus: otherwise it runs `dbus-launch --autolaunch`
+# against :0, which hangs when a dead session is still around, and
+# `pulseaudio --start` never returns.
 if ! pulseaudio --check 2>/dev/null; then
-  pulseaudio --start --exit-idle-time=-1 \
-    --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1"
+  pkill -x pulseaudio 2>/dev/null
+  rm -rf "$XDG_RUNTIME_DIR/pulse"
+  env -u DISPLAY -u DBUS_SESSION_BUS_ADDRESS timeout 15 \
+    pulseaudio --start --exit-idle-time=-1 \
+      --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" ||
+    echo "PulseAudio didn't start, continuing without sound" >&2
 fi
 export PULSE_SERVER=127.0.0.1
+
+export DISPLAY=:0
 
 # GPU: OpenGL through Zink on top of Turnip (Adreno Vulkan).
 # glxinfo -B | grep renderer shows "zink"/"Turnip" when this works and
@@ -43,8 +54,19 @@ export XCURSOR_SIZE=20
 
 # X server on :0, running i3 inside a D-Bus session
 termux-x11 :0 -xstartup "dbus-launch --exit-with-session i3 -c $HOME/.config/i3/config" \
-  >"$XDG_RUNTIME_DIR/termux-x11.log" 2>&1 &
+  >"$LOG" 2>&1 &
 
-sleep 1
+# Wait for the server before switching to the app (it says "not connected"
+# when opened before the server is up)
+for _ in {1..100}; do
+  [[ -S $SOCKET ]] && break
+  sleep 0.1
+done
+if [[ ! -S $SOCKET ]]; then
+  echo "X server didn't come up within 10s. Log: $LOG" >&2
+  tail -n 20 "$LOG" >&2
+  exit 1
+fi
+
 # Switch to the Termux:X11 app
 am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity >/dev/null 2>&1
