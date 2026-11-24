@@ -23,14 +23,18 @@ export PULSE_SERVER=127.0.0.1
 
 # GPU: OpenGL through Zink on top of Turnip (Adreno Vulkan).
 # glxinfo -B | grep renderer shows "zink"/"Turnip" when this works and
-# "llvmpipe" when Mesa fell back to software (picom.sh then uses xrender).
-export MESA_LOADER_DRIVER_OVERRIDE=zink
-export TU_DEBUG=noconform
-export GALLIUM_DRIVER=zink
-# termux-x11 has no usable DRI3 swapchain for Turnip: without this, zink
-# can't create a swapchain and GL windows (kitty, picom) stay black.
-# The software WSI copies frames instead and still renders on the GPU.
-export MESA_VK_WSI_DEBUG=sw
+# "llvmpipe" when Mesa fell back to software.
+# Only on Qualcomm Adreno (Turnip only supports those): forcing zink on
+# another GPU would break GL instead of falling back to llvmpipe.
+if [[ $(getprop ro.hardware.vulkan 2>/dev/null) == adreno* ]]; then
+  export MESA_LOADER_DRIVER_OVERRIDE=zink
+  export TU_DEBUG=noconform
+  export GALLIUM_DRIVER=zink
+  # termux-x11 has no usable DRI3 swapchain for Turnip: without this, zink
+  # can't create a swapchain and GL windows (kitty, picom) stay black.
+  # The software WSI copies frames instead and still renders on the GPU.
+  export MESA_VK_WSI_DEBUG=sw
+fi
 
 # GTK/Qt apps: dark, X11
 export GTK_THEME=Adwaita:dark

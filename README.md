@@ -8,10 +8,28 @@ It keeps the same look (black, 1px teal border, no gaps, no animations, blur onl
 Super+Shift+E                 stop  (scripts/stop-desktop.sh)
 ```
 
+## Setup on a new device
+
+```bash
+pkg install git
+git clone <this repo> ~/.config/i3
+~/.config/i3/install.sh ch        # argument = keyboard layout, default ch
+~/start-desktop.sh
+```
+
+`install.sh` enables x11-repo and installs every package. It also downloads NotoSans Nerd Font (not packaged in Termux) into `~/.local/share/fonts`, creates the symlinks (backing up anything already in the way), and writes `local.conf` with the keyboard layout (not tracked in git). It finishes with checks for the i3 config, the GPU and Termux:API. You can run it again at any time: whatever is already in place is skipped.
+
+The script can't do the Android side; do these once by hand:
+- Install the **Termux:X11** and **Termux:API** apps from the same source as Termux.
+- Termux:X11 settings: see the section at the end.
+
+GPU acceleration (Turnip + zink) only works on Qualcomm Adreno. `start-desktop.sh` checks `getprop ro.hardware.vulkan` and on other GPUs leaves Mesa on llvmpipe (software rendering).
+
 ## Layout
 
 | path | what | Hyprland counterpart |
 |---|---|---|
+| `install.sh` | setup on a new device | – |
 | `config` | i3 config | `hyprland.lua`, `custom/keybinds.lua` |
 | `picom.conf`, `scripts/picom.sh` | compositor: corners, shadow, launcher blur | `decoration {}` |
 | `polybar/` | bar: workspaces, clock, volume, memory, battery | waybar |
@@ -21,8 +39,9 @@ Super+Shift+E                 stop  (scripts/stop-desktop.sh)
 | `xfce4-terminal/terminalrc` | fallback terminal theme | – |
 | `scripts/` | start/stop, volume, layout cycle, screenshots, terminal wrapper | `scripts/` |
 
-Symlinks into this repo: `~/.config/kitty`, `~/.config/dunst/dunstrc`,
-`~/.config/xfce4/terminal/terminalrc`, `~/start-desktop.sh`.
+Symlinks into this repo (created by `install.sh`): `~/.config/kitty`,
+`~/.config/dunst/dunstrc`, `~/.config/xfce4/terminal/terminalrc`, `~/start-desktop.sh`.
+`local.conf` holds the device-specific settings and isn't tracked in git.
 
 ## Palette
 
